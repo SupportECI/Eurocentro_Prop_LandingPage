@@ -51,7 +51,7 @@ const SIMPLE_VIDEOS = [
   }
 ];
 
-export default function VideoCarousel2() {
+export default function VideoCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [dragOffset, setDragOffset] = useState(0);
@@ -153,41 +153,41 @@ export default function VideoCarousel2() {
   }, [selectedVideo]);
 
   return (
-    <section className="apple-user-video-carousel" id="video-testimonios" aria-label="Videos testimoniales">
-      <div className="container">
-        {/* Cabecera y Controles Apple con espaciado compacto */}
-        <div className="video-carousel-header">
-          <div className="video-carousel-controls">
+    <section className="pt-4 pb-14 bg-ec-canvas relative" id="video-testimonios" aria-label="Videos testimoniales">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Controles de Navegación Compactos */}
+        <div className="flex justify-center items-center mb-5">
+          <div className="inline-flex items-center gap-4 bg-white border border-black/10 rounded-full px-4 py-1.5 shadow-sm">
             <button
               type="button"
-              className="apple-nav-arrow-btn"
+              className="w-10 h-10 rounded-full bg-ec-canvas-alt text-ec-navy-950 flex items-center justify-center cursor-pointer shadow-sm transition-all duration-200 hover:bg-ec-blue-primary hover:text-white hover:shadow-md active:scale-90 border-0"
               onClick={prevSlide}
               aria-label="Ver videos anteriores"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 stroke-current" fill="none" strokeWidth="2.5" viewBox="0 0 24 24">
                 <polyline points="15 18 9 12 15 6"></polyline>
               </svg>
             </button>
-            <span className="apple-carousel-counter">
+            <span className="text-xs sm:text-sm font-bold text-ec-text-muted min-w-[50px] text-center select-none tracking-wider">
               {currentIndex + 1} / {maxIndex + 1}
             </span>
             <button
               type="button"
-              className="apple-nav-arrow-btn"
+              className="w-10 h-10 rounded-full bg-ec-canvas-alt text-ec-navy-950 flex items-center justify-center cursor-pointer shadow-sm transition-all duration-200 hover:bg-ec-blue-primary hover:text-white hover:shadow-md active:scale-90 border-0"
               onClick={nextSlide}
               aria-label="Ver siguientes videos"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 stroke-current" fill="none" strokeWidth="2.5" viewBox="0 0 24 24">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Viewport Interactivo: 3 tarjetas simultáneas */}
+        {/* Viewport Interactivo (Exactamente 3 simultáneos en desktop) */}
         <div
           ref={containerRef}
-          className={`apple-carousel-viewport ${isDragging ? 'is-dragging' : ''}`}
+          className={`overflow-hidden w-full max-w-[1200px] mx-auto rounded-3xl select-none touch-pan-y ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'ArrowLeft') prevSlide();
@@ -199,23 +199,20 @@ export default function VideoCarousel2() {
           onPointerCancel={handlePointerUp}
         >
           <div
-            className="apple-carousel-track"
+            className="flex w-full will-change-transform"
             style={{
-              transform: `translateX(calc(-${currentIndex} * (100% + 20px) / ${slidesToShow} + ${dragOffset}px))`,
+              transform: `translateX(calc(-${currentIndex * (100 / slidesToShow)}% + ${dragOffset}px))`,
               transition: isDragging ? 'none' : 'transform 450ms cubic-bezier(0.16, 1, 0.3, 1)'
             }}
           >
             {SIMPLE_VIDEOS.map((item) => (
               <div
                 key={item.id}
-                className="apple-video-slide"
-                style={{
-                  flex: `0 0 calc((100% - ${(slidesToShow - 1) * 20}px) / ${slidesToShow})`,
-                  width: `calc((100% - ${(slidesToShow - 1) * 20}px) / ${slidesToShow})`
-                }}
+                className="shrink-0 px-2.5"
+                style={{ width: `${100 / slidesToShow}%` }}
               >
                 <div
-                  className="apple-clean-video-card"
+                  className="relative w-full aspect-video rounded-3xl overflow-hidden bg-black shadow-xl border border-white/20 cursor-pointer group"
                   onClick={() => setSelectedVideo(item)}
                   role="button"
                   tabIndex={0}
@@ -225,23 +222,23 @@ export default function VideoCarousel2() {
                   <img
                     src={item.poster}
                     alt={item.name}
-                    className="apple-video-poster-img"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     onError={(e) => { e.currentTarget.src = item.fallbackPoster; }}
                     loading="lazy"
                   />
-                  <div className="apple-video-poster-scrim"></div>
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/15 to-[#050a18]/75 pointer-events-none"></div>
 
                   {/* Botón Apple Play Central */}
-                  <div className="apple-play-circle" aria-hidden="true">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-ec-blue-primary text-white flex items-center justify-center pl-1 shadow-[0_12px_30px_rgba(0,113,227,0.45)] ring-8 ring-ec-blue-primary/20 transition-all duration-200 group-hover:scale-110 group-hover:bg-ec-blue-hover group-hover:ring-[12px] group-hover:ring-ec-blue-primary/30 z-10" aria-hidden="true">
+                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                       <polygon points="6 4 20 12 6 20 6 4" />
                     </svg>
                   </div>
 
-                  {/* Etiqueta mínima de identificación (sin descripción) */}
-                  <div className="apple-video-min-badge">
+                  {/* Etiqueta de identificación sin descripción */}
+                  <div className="absolute bottom-3.5 left-4 text-xs font-semibold px-3.5 py-1.5 rounded-full bg-[#050a18]/85 backdrop-blur-md border border-white/20 text-white flex items-center gap-2 z-10">
                     <span>{item.name}</span>
-                    <span className="badge-dot">•</span>
+                    <span className="text-ec-blue-primary font-black">•</span>
                     <span>{item.language}</span>
                   </div>
                 </div>
@@ -251,12 +248,16 @@ export default function VideoCarousel2() {
         </div>
 
         {/* Indicadores de Paginación Dots */}
-        <div className="apple-carousel-dots" aria-hidden="true">
+        <div className="flex justify-center items-center gap-2 mt-6" aria-hidden="true">
           {Array.from({ length: maxIndex + 1 }).map((_, dotIdx) => (
             <button
               key={dotIdx}
               type="button"
-              className={`apple-carousel-dot ${currentIndex === dotIdx ? 'active' : ''}`}
+              className={`h-2 rounded-full border-0 cursor-pointer p-0 transition-all duration-300 ${
+                currentIndex === dotIdx
+                  ? 'w-7 bg-ec-blue-primary shadow-[0_2px_8px_rgba(0,113,227,0.4)]'
+                  : 'w-2 bg-black/20 hover:bg-black/40'
+              }`}
               onClick={() => setCurrentIndex(dotIdx)}
               aria-label={`Ir al grupo ${dotIdx + 1}`}
             />
@@ -264,42 +265,45 @@ export default function VideoCarousel2() {
         </div>
       </div>
 
-      {/* Modal Apple para reproducir el video al hacer clic */}
+      {/* Modal Apple para reproducir el video */}
       {selectedVideo && (
         <div
-          className="video-modal-backdrop"
+          className="fixed inset-0 z-[2000] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
           onClick={() => setSelectedVideo(null)}
           role="dialog"
           aria-modal="true"
           aria-label={`Reproductor de video de ${selectedVideo.name}`}
         >
-          <div className="video-modal-dialog" onClick={(e) => e.stopPropagation()}>
-            <div className="video-modal-header">
-              <div className="d-flex align-items-center gap-2">
-                <span className="video-modal-title">{selectedVideo.name}</span>
-                <span className="badge-dot">•</span>
-                <small className="video-modal-subtitle">{selectedVideo.language}</small>
+          <div
+            className="bg-[#0a1128] border border-white/15 rounded-3xl overflow-hidden w-full max-w-4xl shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 text-white">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-base sm:text-lg text-white">{selectedVideo.name}</span>
+                <span className="text-ec-blue-primary font-black">•</span>
+                <small className="text-white/70 text-xs sm:text-sm font-medium">{selectedVideo.language}</small>
               </div>
               <button
                 type="button"
-                className="video-modal-close-btn"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border-0 cursor-pointer"
                 onClick={() => setSelectedVideo(null)}
                 aria-label="Cerrar video"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
             </div>
-            <div className="video-modal-player-wrap">
+            <div className="relative w-full aspect-video bg-black">
               <video
                 src={selectedVideo.videoUrl}
                 poster={selectedVideo.poster}
                 controls
                 autoPlay
                 playsInline
-                className="video-modal-player"
+                className="w-full h-full object-cover bg-black"
               />
             </div>
           </div>
@@ -308,3 +312,4 @@ export default function VideoCarousel2() {
     </section>
   );
 }
+

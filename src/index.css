@@ -1,5 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ==========================================================================
-   GLOBAL STYLES (EUROCENTRO)
+   GLOBAL BASE (EUROCENTRO - TAILWIND)
    ========================================================================== */
 
 html {
@@ -11,4 +15,38 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #1d1d1f;
+  background-color: #fbfbfd;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: #0071e3;
+  color: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f4;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5c5cb;
+  border-radius: 980px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9b9b9f;
+}
+
+/* Integración intl-tel-input */
+.iti {
+  width: 100% !important;
+  display: block !important;
+}
+
+.iti input[type="tel"] {
+  width: 100% !important;
 }

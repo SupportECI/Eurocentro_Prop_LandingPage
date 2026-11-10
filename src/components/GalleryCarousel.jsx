@@ -51,19 +51,29 @@ const GALLERY_IMAGES = [
   }
 ];
 
-export default function GalleryCarousel2() {
+export default function GalleryCarousel() {
   const items = [...GALLERY_IMAGES, ...GALLERY_IMAGES];
 
   return (
-    <section className="apple-gallery-strip" id="galeria" aria-label="Galería fotográfica EuroCentro">
-      <div className="gallery-marquee-viewport">
-        <div className="gallery-marquee-track">
+    <section className="py-8 bg-ec-canvas-alt overflow-hidden relative" id="galeria" aria-label="Galería fotográfica EuroCentro">
+      {/* Viewport con máscara de difuminado lateral */}
+      <div
+        className="overflow-hidden w-full relative py-3"
+        style={{
+          maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)'
+        }}
+      >
+        <div className="flex gap-5 w-max animate-marquee hover:[animation-play-state:paused]">
           {items.map((item, idx) => (
-            <div key={`${item.id}-${idx}`} className="gallery-photo-card">
+            <div
+              key={`${item.id}-${idx}`}
+              className="flex-none w-[320px] h-[215px] rounded-2xl overflow-hidden shadow-md border border-black/8 bg-ec-navy-950 transition-all duration-300 hover:scale-[1.04] hover:shadow-xl group"
+            >
               <img
                 src={item.src}
                 alt={item.alt}
-                className="gallery-photo-img"
+                className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-105"
                 onError={(e) => { e.currentTarget.src = item.fallback; }}
                 loading="lazy"
               />
@@ -74,3 +84,4 @@ export default function GalleryCarousel2() {
     </section>
   );
 }
+
